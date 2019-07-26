@@ -244,8 +244,16 @@ public class JapaneseAddressParser {
 
 @Data
 class JapaneseAddress {
+
+	protected String address;
 	protected String prefecture;
 	protected String city;
 	protected String townarea;
 	protected String ext;
+
+	protected String normalizedAddress;
+	protected String normalizedPrefecture;
+	protected String normalizedCity;
+	protected String normalizedTownarea;
+	protected String normalizedExt;
 }
