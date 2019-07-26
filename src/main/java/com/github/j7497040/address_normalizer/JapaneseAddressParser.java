@@ -44,20 +44,55 @@ public class JapaneseAddressParser {
 //	 * 市区町村-町域リスト構造.
 //	 */
 //	Map<String, List<String>> mapPrefectureCity = new HashMap<String, List<String>>();
-
 	
 	/**
 	 * 同名市区町村のリスト.
 	 */
 	protected static List<String> sameNameCity;
 	
-	protected static final String PREFECTURE_SPLITTER = "(...??[都道府県])";
+	/**
+	 * 都道府県を切り出すためのパターン.
+	 */
+	protected static final String PREFECTURE_SPLITTER = "^([^\\x00-\\x7F]{2,3}県|..府|東京都|北海道)(.+)";
 	protected static final Pattern PREFECTURE_PATTERN= Pattern.compile(PREFECTURE_SPLITTER);
 	
-	protected static final String CITY_SPLITTER = "(...??[都道府県])?((?:旭川|伊達|石狩|盛岡|奥州|田村|南相馬|那須塩原|東村山|武蔵村山|羽村|十日町|上越|富山|野々市|大町|蒲郡|四日市|姫路|大和郡山|廿日市|下松|岩国|田川|大村)市|.+?郡(?:玉村|大町|.+?)[町村]|.+?市.+?区|.+?[市区町村])(.+)";
+	/**
+	 * 市区町村を切り出すためのパターン.
+	 */
+	protected static final String CITY_SPLITTER = "^((?:旭川|伊達|石狩|盛岡|奥州|田村|南相馬|那須塩原|東村山|武蔵村山|羽村|十日町|上越|富山|野々市|大町|蒲郡|四日市|姫路|大和郡山|廿日市|下松|岩国|田川|大村)市|.+?郡(?:玉村|大町|.+?)[町村]|.+?市.+?区|.+?[市区町村])(.+)";
 	protected static final Pattern CITY_PATTERN= Pattern.compile(CITY_SPLITTER);
 
-	
+	/**
+	 * 漢数字
+	 */
+	protected static final String KANJI_NUM = "[一二三四五六七八九十百千万]";
+
+	/**
+	 * 繋ぎ文字1：数字と数字の間(末尾以外)
+	 */
+	protected static final String BRIDGE_STR = "(丁目|丁|番地|番|号|-|‐|ー|−|の|東|西|南|北)";
+
+	/**
+	 * 繋ぎ文字2：数字と数字の間(末尾)
+	 */
+	protected static final String BRIDGE_LAST_STR = "(丁目|丁|番地|番|号)";
+
+	/**
+	 * 全ての数字
+	 */
+	protected static final String ALL_NUM = "(\\d+|[一二三四五六七八九十百千万]+)";
+
+	/**
+	 * 「先頭は数字、途中は数字か繋ぎ文字1、最後は数字か繋ぎ文字2」を満たす正規表現
+	 * 町域と丁目、番地、号を切り出すためのパターン.
+	 * 丁目、番地、号以前は町域、以降はビル名等になる.
+	 */
+	protected static final String TOWNAREA_SPLITTER = String.format("%s*(%s|%s{1,2})*(%s|%s)", ALL_NUM, ALL_NUM, BRIDGE_STR, ALL_NUM, BRIDGE_LAST_STR);
+	protected static final Pattern TOWNAREA_PATTERN= Pattern.compile(TOWNAREA_SPLITTER);
+
+//	regex6 = /#{all_num}*(#{all_num}|#{s_str1}{1,2})*(#{all_num}|#{s_str2}{1,2})/
+
+
 	/**
 	 * クラスパス内にあるテキストファイルの内容をひとつの文字列として読み込む。
 	 * テキストファイルの文字コードはWindows_31Jのみに対応。
