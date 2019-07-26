@@ -27,4 +27,6 @@ hs_err_pid*
 target
 .classpath
 .project
+.factorypath
+.sts4-cache
 
