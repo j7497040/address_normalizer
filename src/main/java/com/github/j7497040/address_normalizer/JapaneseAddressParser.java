@@ -35,25 +35,15 @@ public class JapaneseAddressParser {
 	
 	/**
 	 * 日本語住所の辞書.
-	 * 都道府県-市区町村リスト構造.
+	 * 市区町村-都道府県のリスト構造.
+	 * 同名市区町村の場合はListが複数になります.
 	 */
-	Map<String, List<String>> mapPrefectureCity = new HashMap<String, List<String>>();
-	
-//	/**
-//	 * 日本語住所の辞書.
-//	 * 市区町村-町域リスト構造.
-//	 */
-//	Map<String, List<String>> mapPrefectureCity = new HashMap<String, List<String>>();
-	
-	/**
-	 * 同名市区町村のリスト.
-	 */
-	protected static List<String> sameNameCity;
+	Map<String, List<String>> mapCityPrefecture = new HashMap<String, List<String>>();
 	
 	/**
 	 * 都道府県を切り出すためのパターン.
 	 */
-	protected static final String PREFECTURE_SPLITTER = "^([^\\x00-\\x7F]{2,3}県|..府|東京都|北海道)(.+)";
+	protected static final String PREFECTURE_SPLITTER = "([^\\x00-\\x7F]{2,3}県|..府|東京都|北海道)(.+)";
 	protected static final Pattern PREFECTURE_PATTERN= Pattern.compile(PREFECTURE_SPLITTER);
 	
 	/**
@@ -116,6 +106,7 @@ public class JapaneseAddressParser {
 			parser.forEach(record -> {
 				
 				System.out.println(record.get(0));
+
 				
 				// TODO: 住所データをMapに読み込む
 			});
