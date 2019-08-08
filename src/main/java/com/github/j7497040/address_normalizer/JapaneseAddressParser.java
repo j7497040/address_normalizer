@@ -106,7 +106,7 @@ public class JapaneseAddressParser {
 			parser.forEach(record -> {
 				
 				System.out.println(record.get(0));
-
+				mapJapaneseAddress.put(key)
 				
 				// TODO: 住所データをMapに読み込む
 			});
